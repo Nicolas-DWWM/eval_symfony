@@ -21,12 +21,12 @@ final class MainController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $defaultStatus = $statusRepository->findByOne(['name' => 'Nouveau']);
+            $defaultStatus = $statusRepository->findOneBy(['name' => 'Nouveau']);
             $ticket->setStatus($defaultStatus);
             $em->persist($ticket);
             $em->flush();
             $this->addFlash('success','Votre ticket a bien été enregistré.');
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_main');
         }
     
     
