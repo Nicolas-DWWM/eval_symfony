@@ -13,6 +13,55 @@
         {% endblock %}
     </head>
     <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{{ path('app_main') }}">Agence Support</a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_main') }}">Accueil</a>
+                        </li>
+                        
+                        {# Liens visibles uniquement par le Staff et l'Admin #}
+                        {% if is_granted('ROLE_USER') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_ticket_index') }}">Liste des Tickets</a>
+                            </li>
+                        {% endif %}
+
+                        {# Liens visibles uniquement par l'Admin #}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                                    Administration
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ path('app_category_index') }}">Gérer les Catégories</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_status_index') }}">Gérer les Statuts</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_user_index') }}">Gérer les Utilisateurs</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                    <div class="navbar-nav ms-auto">
+                        {% if app.user %}
+                            <span class="navbar-text me-3">
+                                Connecté en tant que : <strong>{{ app.user.userIdentifier }}</strong>
+                            </span>
+                            <a class="btn btn-outline-light btn-sm" href="{{ path('app_logout') }}">Déconnexion</a>
+                        {% else %}
+                            <a class="btn btn-primary btn-sm" href="{{ path('app_login') }}">Connexion</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
         <div class="container mt-3">
             {# On boucle sur tous les messages flash de type 'success' #}
             {% for message in app.flashes('success') %}
